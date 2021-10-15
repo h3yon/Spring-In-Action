@@ -1,5 +1,6 @@
 package tacos.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
     private UserDetailsService userDetailsService;
 
     @Bean
@@ -43,7 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
         // 4. custom
-        auth.userDetailsService(userDetailsService);
+        auth
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(encoder());
 
         /* 1. 인메모리 방식
         auth.inMemoryAuthentication()
