@@ -20,6 +20,13 @@ import org.springframework.context.annotation.Bean;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private UserDetailsService userDetailsService;
+
+    @Bean
+    public PasswordEncoder encoder(){
+        return new BCryptPasswordEncoder();
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -33,6 +40,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+
+        // 4. custom
+        auth.userDetailsService(userDetailsService);
+
         /* 1. 인메모리 방식
         auth.inMemoryAuthentication()
                 .withUser("user1")
@@ -53,6 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(new NoEncodingPasswordEncoder());
         */
 
+        /* 3. ldap
         auth.ldapAuthentication()
                 .userSearchBase("ou=people")
                 .userSearchFilter("(uid={0})")
@@ -61,13 +73,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordCompare()
                 .passwordEncoder(new BCryptPasswordEncoder())
                 .passwordAttribute("userPassword");
-                /*
+                *//*
                 .contextSource()
                 // 아래 둘 중 하나
                 .url("ldap://tacocloud.com:389/dc=tacoclud,dc=com")
                 .root("dc=tacocloud,dc=com")
                 //LDAP 데이터를 나타내는 표준화된 방법
                 .ldif("classpath:user.ldif")
-                 */
+         */
     }
 }
