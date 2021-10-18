@@ -20,7 +20,6 @@ import java.util.Optional;
 
 @RequestMapping(value = "/design", produces = "application/json")
 @CrossOrigin(origins = "*")
-@RestController
 public class DesignTacoController {
 
     private TacoRepository tacoRepo;
